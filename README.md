@@ -1,7 +1,7 @@
 # concurrente
 
 ## Thread practice setting
-We user 2 libraries that need be intalled
+We use 2 libraries that need be installed
 
 A database adapter for python
 [psycopg2](https://pypi.org/project/psycopg2/)
