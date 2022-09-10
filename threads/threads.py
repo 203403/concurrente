@@ -2,7 +2,7 @@ import requests
 import threading
 import concurrent.futures
 import psycopg2
-from pytube import YouTube
+import pytube
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -14,9 +14,6 @@ video_urls = [
     'https://youtu.be/dnnh8unDP4Y',
     'https://youtu.be/ZF-w__uUs8c'
 ]
-
-dataUrl = []
-
 
 def get_service_register(url):
     response = requests.get(url)
@@ -44,25 +41,34 @@ def write_db(data):
     print('Data saved successfully')
         
 
-def get_services_names(dato=0):
-    response = requests.get('https://randomuser.me/api/')
+def get_services_names(url):
+    for x in range(0,50):
+        th = threading.Thread(target = get_names, args = [url, x])
+        th.start()
+
+def get_names(url, dato=0):
+    response = requests.get(url)
     if response.status_code == 200:
         results = response.json().get('results')
-        name = results[dato].get('name').get('first')
+        name = results[0].get('name').get('first')
         print(f'{dato+1}. {name}')
 
 def get_videos(video_url):
-    yt = YouTube(video_url)
-    yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
-    print(f'{video_url} was downloaded...')     
+    for dataUrl in video_urls:
+        th = threading.Thread(target = download_videos, args = [dataUrl])
+        th.start()
+
+def download_videos(url):
+    pytube.YouTube(url).streams.first().download()
+    print(f'{url} was downloaded...')     
  
 if __name__ == '__main__':
-    url_site = ["https://jsonplaceholder.typicode.com/photos"]
-    th1 = threading.Thread(target = get_service_register, args=url_site)
+    url_site_1 = ["https://jsonplaceholder.typicode.com/photos"]
+    url_site_2 = ["https://randomuser.me/api/"]
+    dato = 0
+    th1 = threading.Thread(target = get_service_register, args=url_site_1)
+    th2 = threading.Thread(target=get_services_names, args=url_site_2)
+    th3 = threading.Thread(target=get_videos, args=[video_urls])
     th1.start()
-    for dataUrl in video_urls:
-        th2 = threading.Thread(target = get_videos, args = [dataUrl])
-        th2.start()
-    for x in range(0,50):
-        th3 = threading.Thread(target = get_services_names, args = [x])
-        th3.start()
+    th2.start()
+    th3.start()
