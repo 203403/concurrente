@@ -8,7 +8,8 @@ A database adapter for python
 ```bash
 pip install psycopg2
 ```
-To download Youtube videos:[pytube](https://pytube.io/en/latest/index.html)
+To download Youtube videos
+[pytube](https://pytube.io/en/latest/index.html)
 ```bash
 pip install pytube
 ```
