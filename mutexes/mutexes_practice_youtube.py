@@ -5,7 +5,7 @@ mutex = threading.Lock()
 
 def crito(id):
     global x;
-    x = x + 1
+    x = x + id
     print("Hilo =" + str(id) + " =>" + str(x))
     x = 1
 
