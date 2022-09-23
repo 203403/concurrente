@@ -3,7 +3,7 @@ import pytube
 
 mutex = threading.Lock()
 
-def crito(id):
+def critico(id):
     global x;
     x = x + id
     print("Hilo =" + str(id) + " =>" + str(x))
@@ -27,7 +27,7 @@ class Hilo(threading.Thread):
     
     def run(self):
         mutex.acquire()
-        crito(self.id)
+        critico(self.id)
         download_videos(self.id)
         # print("valor " + str(self.id))
         mutex.release()
