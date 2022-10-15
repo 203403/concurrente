@@ -35,6 +35,8 @@ class Productor(threading.Thread):
             print(f"Productor {self.id} tambien esta en espera...")
     
     def producir(self, cantidad):
+        if (MAX_SIZE_BODEGA - BODEGA.__len__()) < cantidad:
+            cantidad = MAX_SIZE_BODEGA - BODEGA.__len__()
         print(f"Productor {self.id} produciendo {cantidad} productos")
         for _ in range(cantidad):
             if(BODEGA.__len__() < (MAX_SIZE_BODEGA)):
@@ -55,9 +57,9 @@ class Productor(threading.Thread):
         time.sleep(0.3)
         for i in range(REPETICIONES):
             self.espera()
-            if (BODEGA.__len__() >= MAX_SIZE_BODEGA):
+            if (BODEGA.__len__() == MAX_SIZE_BODEGA):
                 print("ESPERANDO... BODEGA LLENA")
-                time.sleep(1)  
+                time.sleep(2)  
             else:
                 self.producir(productos_random)
             self.liberar()
